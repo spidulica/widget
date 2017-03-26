@@ -27,7 +27,6 @@ public class WidgetClass extends AppWidgetProvider {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_class);
-        views.setRemoteAdapter(R.id.recyclerView, );
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
