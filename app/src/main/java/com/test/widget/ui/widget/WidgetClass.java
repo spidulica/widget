@@ -1,9 +1,18 @@
-package com.test.widget;
+package com.test.widget.ui.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.test.widget.R;
+import com.test.widget.api_call.CallbackApiListener;
+import com.test.widget.entities.Interval;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Implementation of App Widget functionality.

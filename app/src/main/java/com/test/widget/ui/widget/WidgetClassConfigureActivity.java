@@ -1,4 +1,4 @@
-package com.test.widget;
+package com.test.widget.ui.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -9,32 +9,29 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.test.widget.R;
+import com.test.widget.api_call.ApiCalls;
+import com.test.widget.api_call.AppUrlConstants;
+import com.test.widget.api_call.CallbackApiListener;
+import com.test.widget.entities.Interval;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * The configuration screen for the {@link WidgetClass WidgetClass} AppWidget.
  */
-public class WidgetClassConfigureActivity extends Activity {
+public class WidgetClassConfigureActivity extends Activity implements CallbackApiListener {
 
-    private static final String PREFS_NAME = "com.test.widget.WidgetClass";
+    private static final String PREFS_NAME = "com.test.widget.ui.widget.WidgetClass";
     private static final String PREF_PREFIX_KEY = "appwidget_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            final Context context = WidgetClassConfigureActivity.this;
-
-            // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
-
-            // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            WidgetClass.updateAppWidget(context, appWidgetManager, mAppWidgetId);
-
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
+            ApiCalls.getInstance(getApplicationContext()).getRequest(AppUrlConstants.BASE_URL, WidgetClassConfigureActivity.this);
         }
     };
 
@@ -94,6 +91,37 @@ public class WidgetClassConfigureActivity extends Activity {
         }
 
         mAppWidgetText.setText(loadTitlePref(WidgetClassConfigureActivity.this, mAppWidgetId));
+    }
+
+    @Override
+    public void onSuccessfulResponse(String response) {
+        HashMap<String, ArrayList<Interval>> orar = new Gson().fromJson(response, new TypeToken<HashMap<String, ArrayList<Interval>>>() {
+        }.getType());
+
+        updateWidget(response);
+    }
+
+    private void updateWidget(String response) {
+        final Context context = WidgetClassConfigureActivity.this;
+
+        // When the button is clicked, store the string locally
+        String widgetText = mAppWidgetText.getText().toString();
+        saveTitlePref(context, mAppWidgetId, response);
+
+        // It is the responsibility of the configuration activity to update the app widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        WidgetClass.updateAppWidget(context, appWidgetManager, mAppWidgetId);
+
+        // Make sure we pass back the original appWidgetId
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_OK, resultValue);
+        finish();
+    }
+
+    @Override
+    public void onFailResponse() {
+
     }
 }
 
