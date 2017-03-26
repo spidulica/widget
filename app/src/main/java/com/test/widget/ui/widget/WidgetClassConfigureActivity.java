@@ -9,16 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.test.widget.R;
 import com.test.widget.api_call.ApiCalls;
 import com.test.widget.api_call.AppUrlConstants;
 import com.test.widget.api_call.CallbackApiListener;
-import com.test.widget.entities.Interval;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * The configuration screen for the {@link WidgetClass WidgetClass} AppWidget.
@@ -95,9 +89,6 @@ public class WidgetClassConfigureActivity extends Activity implements CallbackAp
 
     @Override
     public void onSuccessfulResponse(String response) {
-        HashMap<String, ArrayList<Interval>> orar = new Gson().fromJson(response, new TypeToken<HashMap<String, ArrayList<Interval>>>() {
-        }.getType());
-
         updateWidget(response);
     }
 
@@ -105,7 +96,6 @@ public class WidgetClassConfigureActivity extends Activity implements CallbackAp
         final Context context = WidgetClassConfigureActivity.this;
 
         // When the button is clicked, store the string locally
-        String widgetText = mAppWidgetText.getText().toString();
         saveTitlePref(context, mAppWidgetId, response);
 
         // It is the responsibility of the configuration activity to update the app widget

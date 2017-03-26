@@ -8,7 +8,6 @@ import android.widget.RemoteViews;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.test.widget.R;
-import com.test.widget.api_call.CallbackApiListener;
 import com.test.widget.entities.Interval;
 
 import java.util.ArrayList;
@@ -22,11 +21,13 @@ public class WidgetClass extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
         CharSequence widgetText = WidgetClassConfigureActivity.loadTitlePref(context, appWidgetId);
+        HashMap<String, ArrayList<Interval>> orar = new Gson().fromJson(widgetText.toString(), new TypeToken<HashMap<String, ArrayList<Interval>>>() {
+        }.getType());
+
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_class);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        views.setRemoteAdapter(R.id.recyclerView, );
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -36,7 +37,7 @@ public class WidgetClass extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
