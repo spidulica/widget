@@ -1,10 +1,12 @@
 package com.test.widget.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by Spidulica on 26-Mar-17.
  */
 
-public class Interval {
+public class Interval implements Serializable {
     private String grupa;
     private String materie;
     private String profesor;

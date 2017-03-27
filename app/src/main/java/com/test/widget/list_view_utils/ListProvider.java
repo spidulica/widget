@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
-    private ArrayList<Interval> listItemList = new ArrayList<Interval>();
+    private ArrayList<Interval> listItemList;
     private Context context = null;
     private int appWidgetId;
 
@@ -26,16 +26,15 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
 
+        listItemList = (ArrayList<Interval>) intent.getSerializableExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS);
+
         populateListItem();
     }
 
     private void populateListItem() {
-        if(RemoteFetchService.listItemList !=null )
-            listItemList = (ArrayList<Interval>) RemoteFetchService.listItemList
-                    .clone();
-        else
-            listItemList = new ArrayList<Interval>();
-
+        if (listItemList == null) {
+            listItemList = new ArrayList<>();
+        }
     }
 
     @Override

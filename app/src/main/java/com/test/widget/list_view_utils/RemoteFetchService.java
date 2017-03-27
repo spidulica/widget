@@ -26,7 +26,7 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
 
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
-    public static ArrayList<Interval> listItemList;
+    private  ArrayList<Interval> listItemList;
     private String grupa;
 
     @Nullable
@@ -52,8 +52,8 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
 
         Intent widgetUpdateIntent = new Intent();
         widgetUpdateIntent.setAction(WidgetClass.DATA_FETCHED);
-        widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                appWidgetId);
+        widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, listItemList);
         sendBroadcast(widgetUpdateIntent);
 
         this.stopSelf();
