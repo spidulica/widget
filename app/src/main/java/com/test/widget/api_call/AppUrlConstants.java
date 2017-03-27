@@ -6,6 +6,6 @@ package com.test.widget.api_call;
 
 public class AppUrlConstants {
 
-    public static final String BASE_URL = "http://192.168.0.112:9080/Cercetare/rest/test";
+    public static final String BASE_URL = "http://192.168.0.101:9080/Cercetare/rest/test";
 
 }

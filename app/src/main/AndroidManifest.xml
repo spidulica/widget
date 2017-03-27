@@ -25,7 +25,10 @@
 
         <receiver android:name=".ui.widget.WidgetClass">
             <intent-filter>
+                <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- To receive broadcast with this string name -->
+                <action android:name="com.wordpress.laaptu.DATA_FETCHED" />
             </intent-filter>
 
             <meta-data
@@ -39,7 +42,10 @@
 
             </intent-filter>
         </activity>
-
+        <service android:name=".list_view_utils.RemoteFetchService" />
+        <service
+            android:name=".list_view_utils.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>
