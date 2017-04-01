@@ -18,7 +18,6 @@ import com.test.widget.MyApplication;
 import com.test.widget.utils.AppConstants;
 import com.test.widget.utils.AppLog;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -78,6 +77,31 @@ public class ApiCalls {
                     public void onResponse(JSONObject response) {
                         AppLog.i(this.getClass(), "Url : " + url + response.toString());
                         callbackApiListener.onSuccessfulResponse(response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        AppLog.i(this.getClass(), "Url : " + AppUrlConstants.BASE_URL + "\nError :" + error.toString());
+                        callbackApiListener.onFailResponse();
+                    }
+                }
+        );
+
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(2 * DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 0));
+        getRequest.setTag(MyApplication.TAG);
+        // add it to the RequestQueue
+        requestQueue.add(getRequest);
+    }
+
+    public void getStringRequest(final String url, final CallbackApiListener callbackApiListener) {
+
+        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        AppLog.i(this.getClass(), "Url : " + url + response.toString());
+                        callbackApiListener.onSuccessfulResponse(response);
                     }
                 },
                 new Response.ErrorListener() {

@@ -26,14 +26,16 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
 
-        listItemList = (ArrayList<Interval>) intent.getSerializableExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS);
-
         populateListItem();
     }
 
     private void populateListItem() {
-        if (listItemList == null) {
+        if (RemoteFetchService.listItemList == null) {
             listItemList = new ArrayList<>();
+        }else{
+            System.out.println(listItemList);
+            listItemList = (ArrayList<Interval>) RemoteFetchService.listItemList
+                    .clone();
         }
     }
 
@@ -57,6 +59,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         final RemoteViews remoteView = new RemoteViews(
                 context.getPackageName(), R.layout.widget_row);
         Interval listItem = listItemList.get(position);
+
         remoteView.setTextViewText(R.id.profesor, listItem.getProfesor());
         remoteView.setTextViewText(R.id.materie, listItem.getMaterie());
         remoteView.setTextViewText(R.id.locatie, listItem.getLocatie());

@@ -11,8 +11,11 @@ public class Interval implements Serializable {
     private String materie;
     private String profesor;
     private String locatie;
-    private int oraInceput;
-    private int oraSfarsit;
+    private String oraInceput;
+    private String oraSfarsit;
+    private Long id;
+    private int an;
+    private String zi;
 
     public String getGrupa() {
         return grupa;
@@ -46,19 +49,58 @@ public class Interval implements Serializable {
         this.locatie = locatie;
     }
 
-    public int getOraInceput() {
+    public String getOraInceput() {
         return oraInceput;
     }
 
-    public void setOraInceput(int oraInceput) {
+    public void setOraInceput(String oraInceput) {
         this.oraInceput = oraInceput;
     }
 
-    public int getOraSfarsit() {
+    public String getOraSfarsit() {
         return oraSfarsit;
     }
 
-    public void setOraSfarsit(int oraSfarsit) {
+    public void setOraSfarsit(String oraSfarsit) {
         this.oraSfarsit = oraSfarsit;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getAn() {
+        return an;
+    }
+
+    public void setAn(int an) {
+        this.an = an;
+    }
+
+    public String getZi() {
+        return zi;
+    }
+
+    public void setZi(String zi) {
+        this.zi = zi;
+    }
+
+    @Override
+    public String toString() {
+        return "Interval{" +
+                "grupa='" + grupa + '\'' +
+                ", materie='" + materie + '\'' +
+                ", profesor='" + profesor + '\'' +
+                ", locatie='" + locatie + '\'' +
+                ", oraInceput='" + oraInceput + '\'' +
+                ", oraSfarsit='" + oraSfarsit + '\'' +
+                ", id=" + id +
+                ", an=" + an +
+                ", zi='" + zi + '\'' +
+                '}';
     }
 }

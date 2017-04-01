@@ -68,7 +68,9 @@ public class WidgetClass extends AppWidgetProvider {
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager = AppWidgetManager
                     .getInstance(context);
+            String day = intent.getStringExtra("Day");
             RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
+            remoteViews.setTextViewText(R.id.day, day);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
 

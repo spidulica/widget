@@ -6,6 +6,12 @@
     android:background="#09C"
     android:padding="@dimen/widget_margin">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/day"
+        android:text="Today"/>
 
     <ListView
         android:id="@+id/recyclerView"
@@ -15,5 +21,5 @@
         android:overScrollMode="never"
         android:scrollbars="vertical"
         tools:listitem="@layout/widget_row"
-        />
+        android:layout_below="@+id/day" />
 </RelativeLayout>

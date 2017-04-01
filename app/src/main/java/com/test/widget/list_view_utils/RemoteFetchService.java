@@ -15,8 +15,7 @@ import com.test.widget.entities.Interval;
 import com.test.widget.ui.widget.WidgetClass;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Calendar;
 
 /**
  * Created by Florin Bucur on 3/27/2017.
@@ -26,8 +25,9 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
 
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
-    private  ArrayList<Interval> listItemList;
+    public static ArrayList<Interval> listItemList;
     private String grupa;
+    private String day;
 
     @Nullable
     @Override
@@ -42,9 +42,10 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             grupa = intent.getStringExtra("grupa");
-            System.out.println(grupa);
         }
-        ApiCalls.getInstance(getApplicationContext()).getRequest(AppUrlConstants.BASE_URL, RemoteFetchService.this);
+        day = getCurrentDay();
+        String path = AppUrlConstants.BASE_URL + "/orar/like?grupa="+ grupa+"&zi=" + day;
+        ApiCalls.getInstance(getApplicationContext()).getStringRequest(path, RemoteFetchService.this);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -53,7 +54,7 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
         Intent widgetUpdateIntent = new Intent();
         widgetUpdateIntent.setAction(WidgetClass.DATA_FETCHED);
         widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, listItemList);
+        widgetUpdateIntent.putExtra("Day", day);
         sendBroadcast(widgetUpdateIntent);
 
         this.stopSelf();
@@ -61,13 +62,11 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
 
     @Override
     public void onSuccessfulResponse(String response) {
-        HashMap<String, ArrayList<Interval>> orar = new Gson().fromJson(response, new TypeToken<HashMap<String, ArrayList<Interval>>>() {
+        ArrayList<Interval> orar = new Gson().fromJson(response, new TypeToken<ArrayList<Interval>>() {
         }.getType());
         listItemList = new ArrayList<Interval>();
-        for(Map.Entry<String, ArrayList<Interval>> entry : orar.entrySet()){
-            for(Interval interval : entry.getValue()){
-                listItemList.add(interval);
-            }
+        for(Interval entry : orar){
+            listItemList.add(entry);
         }
         populateWidget();
     }
@@ -75,5 +74,30 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
     @Override
     public void onFailResponse() {
 
+    }
+
+    private String getCurrentDay(){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        String result = "Today";
+
+        switch (day) {
+            case Calendar.SUNDAY:
+                result = "Duminica";
+            case Calendar.MONDAY:
+                result = "Luni";
+            case Calendar.TUESDAY:
+                result = "Marti";
+            case Calendar.WEDNESDAY:
+                result = "Miercuri";
+            case Calendar.THURSDAY:
+                result = "Joi";
+            case Calendar.FRIDAY:
+                result = "Vineri";
+            case Calendar.SATURDAY:
+                result = "Sambata";
+
+        }
+        return result;
     }
 }
