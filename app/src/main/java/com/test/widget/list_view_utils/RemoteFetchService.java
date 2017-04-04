@@ -44,6 +44,7 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
             grupa = intent.getStringExtra("grupa");
         }
         day = getCurrentDay();
+        System.out.println("asdadada " + day);
         String path = AppUrlConstants.BASE_URL + "/orar/like?grupa="+ grupa+"&zi=" + day;
         ApiCalls.getInstance(getApplicationContext()).getStringRequest(path, RemoteFetchService.this);
         return super.onStartCommand(intent, flags, startId);
@@ -84,18 +85,25 @@ public class RemoteFetchService extends Service implements CallbackApiListener{
         switch (day) {
             case Calendar.SUNDAY:
                 result = "Duminica";
+                break;
             case Calendar.MONDAY:
                 result = "Luni";
+                break;
             case Calendar.TUESDAY:
                 result = "Marti";
+                break;
             case Calendar.WEDNESDAY:
                 result = "Miercuri";
+                break;
             case Calendar.THURSDAY:
                 result = "Joi";
+                break;
             case Calendar.FRIDAY:
                 result = "Vineri";
+                break;
             case Calendar.SATURDAY:
                 result = "Sambata";
+                break;
 
         }
         return result;

@@ -33,7 +33,6 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         if (RemoteFetchService.listItemList == null) {
             listItemList = new ArrayList<>();
         }else{
-            System.out.println(listItemList);
             listItemList = (ArrayList<Interval>) RemoteFetchService.listItemList
                     .clone();
         }
