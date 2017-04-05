@@ -1,6 +1,7 @@
 package com.test.widget.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Spidulica on 26-Mar-17.
@@ -13,6 +14,8 @@ public class Interval implements Serializable {
     private String locatie;
     private String oraInceput;
     private String oraSfarsit;
+    private Date startHour;
+    private Date endHour;
     private Long id;
     private int an;
     private String zi;
@@ -87,6 +90,22 @@ public class Interval implements Serializable {
 
     public void setZi(String zi) {
         this.zi = zi;
+    }
+
+    public Date getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(Date startHour) {
+        this.startHour = startHour;
+    }
+
+    public Date getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(Date endHour) {
+        this.endHour = endHour;
     }
 
     @Override

@@ -12,6 +12,7 @@
         android:text="@string/configure" />
 
     <EditText
+        android:text="331%20CC"
         android:id="@+id/appwidget_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
