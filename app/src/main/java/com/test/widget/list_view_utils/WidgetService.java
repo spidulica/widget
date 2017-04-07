@@ -1,9 +1,6 @@
 package com.test.widget.list_view_utils;
 
-import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -19,20 +16,16 @@ import java.util.ArrayList;
 
 public class WidgetService extends RemoteViewsService implements RemoteViewsService.RemoteViewsFactory {
 
-    private ArrayList<Interval> listItemList = new ArrayList<>();
+    private ArrayList<Interval> listItemList;
     private int scrollPoss;
-    private int appWidgetId;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        int appWidgetId = intent.getIntExtra(
-                AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
-        populateListItem();
         return this;
     }
 
-    private void populateListItem() {
+    @Override
+    public void onDataSetChanged() {
         listItemList = (ArrayList<Interval>) SharePref.getCurrentOrar(getApplicationContext());
         scrollPoss = SharePref.getScollPosition(getApplicationContext());
     }
@@ -47,15 +40,9 @@ public class WidgetService extends RemoteViewsService implements RemoteViewsServ
         return position;
     }
 
-    /*
-     *Similar to getView of Adapter where instead of View
-     *we return RemoteViews
-     *
-     */
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews remoteView = new RemoteViews(
-                this.getPackageName(), R.layout.widget_row);
+        final RemoteViews remoteView = new RemoteViews(this.getPackageName(), R.layout.widget_row);
         Interval listItem = listItemList.get(position);
 
         remoteView.setTextViewText(R.id.profesor, listItem.getProfesor());
@@ -64,13 +51,13 @@ public class WidgetService extends RemoteViewsService implements RemoteViewsServ
         remoteView.setTextViewText(R.id.interval, listItem.getOraInceput() + " - " + listItem.getOraSfarsit());
 
         if (position == scrollPoss) {
-            remoteView.setInt(R.id.row_item, "setBackgroundColor",
-                    Color.WHITE);
+            remoteView.setInt(R.id.row_item, "setBackgroundColor", getApplicationContext().getResources().getColor(R.color.colorPrimaryDark));
+        } else {
+            remoteView.setInt(R.id.row_item, "setBackgroundColor", getApplicationContext().getResources().getColor(R.color.widget));
         }
 
         return remoteView;
     }
-
 
     @Override
     public RemoteViews getLoadingView() {
@@ -89,10 +76,6 @@ public class WidgetService extends RemoteViewsService implements RemoteViewsServ
 
     @Override
     public void onCreate() {
-    }
-
-    @Override
-    public void onDataSetChanged() {
     }
 
     @Override

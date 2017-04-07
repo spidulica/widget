@@ -12,21 +12,18 @@ import com.test.widget.R;
 import com.test.widget.api_call.ApiCalls;
 import com.test.widget.api_call.AppUrlConstants;
 import com.test.widget.api_call.CallbackApiListener;
-import com.test.widget.list_view_utils.RemoteFetchService;
+import com.test.widget.scheduler.SchedulingService;
 import com.test.widget.utils.SharePref;
 import com.test.widget.utils.Utils;
 
 import java.util.Calendar;
 
 /**
- * The configuration screen for the {@link WidgetClass WidgetClass} AppWidget.
+ * The configuration screen for the {@link WidgetProvider WidgetProvider} AppWidget.
  */
 public class WidgetClassConfigureActivity extends Activity implements View.OnClickListener, CallbackApiListener {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    private static final String PREFS_NAME = "com.test.widget.ui.widget.WidgetClass";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
     EditText mAppWidgetText;
-
 
     private void startWidget() {
         // this intent is essential to show the widget
@@ -37,10 +34,8 @@ public class WidgetClassConfigureActivity extends Activity implements View.OnCli
         setResult(Activity.RESULT_OK, intent);
 
         // start your service
-        // to fetch data from web
         SharePref.setAppWidgetId(getApplicationContext(), appWidgetId);
-        Intent serviceIntent = new Intent(this, RemoteFetchService.class);
-        serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        Intent serviceIntent = new Intent(this, SchedulingService.class);
         startService(serviceIntent);
 
         // finish this activity
@@ -101,7 +96,6 @@ public class WidgetClassConfigureActivity extends Activity implements View.OnCli
     public void onFailResponse() {
 
     }
-
 
 }
 

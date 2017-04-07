@@ -79,7 +79,7 @@ public class SharePref {
             }.getType());
 
             for (Interval entry : listItemList) {
-                DateFormat format = new SimpleDateFormat("hh:mm", Locale.getDefault());
+                DateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 Date startDate;
                 Date endDate;
                 try {

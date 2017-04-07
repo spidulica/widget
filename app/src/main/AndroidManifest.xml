@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ui.widget.WidgetClass">
+        <receiver android:name=".ui.widget.WidgetProvider">
             <intent-filter>
                 <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -45,17 +45,18 @@
 
             </intent-filter>
         </activity>
-        <service android:name=".list_view_utils.RemoteFetchService" />
+
         <service
             android:name=".list_view_utils.WidgetService"
+            android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name=".scheduler.AlarmReceiver"></receiver>
+        <receiver android:name=".scheduler.AlarmReceiver"/>
 
         <receiver android:name=".scheduler.BootReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
         <service android:name=".scheduler.SchedulingService" />

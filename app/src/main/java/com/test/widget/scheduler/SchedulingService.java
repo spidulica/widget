@@ -3,11 +3,12 @@ package com.test.widget.scheduler;
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.util.Log;
 
 import com.test.widget.api_call.ApiCalls;
 import com.test.widget.api_call.AppUrlConstants;
 import com.test.widget.api_call.CallbackApiListener;
-import com.test.widget.list_view_utils.RemoteFetchService;
+import com.test.widget.ui.widget.WidgetProvider;
 import com.test.widget.utils.SharePref;
 import com.test.widget.utils.Utils;
 
@@ -22,24 +23,23 @@ public class SchedulingService extends IntentService implements CallbackApiListe
     @Override
     protected void onHandleIntent(Intent intent) {
         String grupa = SharePref.getGrupa(getApplicationContext());
-        if(grupa == null){
-            return;
+        if (grupa != null) {
+            Calendar calendar = Calendar.getInstance();
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            int myDayOfWeek = SharePref.getCurrentDay(getApplicationContext());
+            if (myDayOfWeek != dayOfWeek) {
+                createCallServer(dayOfWeek, grupa);
+            } else {
+                int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+                int myHourOfDay = SharePref.getCurrentHour(getApplicationContext());
+                if (hourOfDay != myHourOfDay) {
+                    SharePref.setCurrentHour(getApplicationContext(), hourOfDay);
+                    moveScrollWidgetPosition();
+                }
+            }
         }
 
-        Calendar calendar = Calendar.getInstance();
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        int myDayOfWeek = SharePref.getCurrentDay(getApplicationContext());
-        if(myDayOfWeek != dayOfWeek){
-            createCallServer(dayOfWeek, grupa);
-            return;
-        }
-
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        int myHourOfDay = SharePref.getCurrentHour(getApplicationContext());
-
-        if(hourOfDay != myHourOfDay){
-            moveScrollWidgetPosition();
-        }
+        AlarmReceiver.completeWakefulIntent(intent);
     }
 
     private void createCallServer(int dayOfWeek, String grupa) {
@@ -55,9 +55,17 @@ public class SchedulingService extends IntentService implements CallbackApiListe
     }
 
     private void updateWidget() {
-        Intent serviceIntent = new Intent(this, RemoteFetchService.class);
-        serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, SharePref.getAppWidgetId(getApplicationContext()));
-        startService(serviceIntent);
+        Log.e(SchedulingService.class.getName(), "service");
+        /*Intent intent = new Intent(this, WidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = {SharePref.getAppWidgetId(getApplicationContext())};
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);*/
+
+        Intent widgetUpdateIntent = new Intent(this, WidgetProvider.class);
+        widgetUpdateIntent.setAction(WidgetProvider.UPDATE_DATA);
+        widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, SharePref.getAppWidgetId(this));
+        sendBroadcast(widgetUpdateIntent);
     }
 
     @Override
@@ -66,7 +74,6 @@ public class SchedulingService extends IntentService implements CallbackApiListe
         Utils.setScrollPosition(getApplicationContext());
         updateWidget();
     }
-
 
 
     @Override
