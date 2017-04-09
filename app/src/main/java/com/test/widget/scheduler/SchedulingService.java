@@ -43,9 +43,10 @@ public class SchedulingService extends IntentService implements CallbackApiListe
     }
 
     private void createCallServer(int dayOfWeek, String grupa) {
+        String serie = SharePref.getSerie(getApplicationContext());
         String day = Utils.getCurrentDay(dayOfWeek);
         SharePref.setDay(getApplicationContext(), dayOfWeek);
-        String path = AppUrlConstants.BASE_URL + "/orar/like?grupa=" + grupa + "&zi=" + day;
+        String path = AppUrlConstants.BASE_URL + "/orar/like?grupa=" + grupa + "%20" + serie + "&zi=" + day;
         ApiCalls.getInstance(getApplicationContext()).getStringRequest(path, this);
     }
 

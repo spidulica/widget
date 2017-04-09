@@ -1,6 +1,7 @@
 package com.test.widget.list_view_utils;
 
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -28,6 +29,7 @@ public class WidgetService extends RemoteViewsService implements RemoteViewsServ
     public void onDataSetChanged() {
         listItemList = (ArrayList<Interval>) SharePref.getCurrentOrar(getApplicationContext());
         scrollPoss = SharePref.getScollPosition(getApplicationContext());
+        Log.e(WidgetService.class.getName(), "onDataSetChanged:" + scrollPoss);
     }
 
     @Override

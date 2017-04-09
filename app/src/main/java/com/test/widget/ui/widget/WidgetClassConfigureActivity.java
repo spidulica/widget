@@ -23,7 +23,8 @@ import java.util.Calendar;
  */
 public class WidgetClassConfigureActivity extends Activity implements View.OnClickListener, CallbackApiListener {
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    EditText mAppWidgetText;
+    EditText mAppWidgetTextGrupa;
+    EditText mAppWidgetTextSerie;
 
     private void startWidget() {
         // this intent is essential to show the widget
@@ -34,13 +35,16 @@ public class WidgetClassConfigureActivity extends Activity implements View.OnCli
         setResult(Activity.RESULT_OK, intent);
 
         // start your service
-        SharePref.setAppWidgetId(getApplicationContext(), appWidgetId);
-        Intent serviceIntent = new Intent(this, SchedulingService.class);
-        startService(serviceIntent);
+        Intent intentUpdate = new Intent(this, WidgetProvider.class);
+        intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = {SharePref.getAppWidgetId(getApplicationContext())};
+        intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intentUpdate);
 
         // finish this activity
         this.finish();
     }
+
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -53,14 +57,18 @@ public class WidgetClassConfigureActivity extends Activity implements View.OnCli
 
         assignAppWidgetId();
         findViewById(R.id.add_button).setOnClickListener(this);
-        mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
+        mAppWidgetTextGrupa = (EditText) findViewById(R.id.appwidget_text_grupa);
+        mAppWidgetTextGrupa.setText(SharePref.getGrupa(this));
+        mAppWidgetTextSerie = (EditText) findViewById(R.id.appwidget_text_serie);
+        mAppWidgetTextSerie.setText(SharePref.getSerie(this));
     }
 
     private void assignAppWidgetId() {
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (extras != null) {
+            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            SharePref.setAppWidgetId(this, appWidgetId);
+        }
     }
 
     @Override
@@ -71,15 +79,16 @@ public class WidgetClassConfigureActivity extends Activity implements View.OnCli
     }
 
     private void serverCall() {
-        String grupa = mAppWidgetText.getText().toString();
-        if (grupa.isEmpty()) {
-            Toast.makeText(this, "Trebuie o grupa", Toast.LENGTH_SHORT).show();
+        String grupa = mAppWidgetTextGrupa.getText().toString();
+        String serie = mAppWidgetTextSerie.getText().toString();
+        if (grupa.isEmpty() || serie.isEmpty()) {
+            Toast.makeText(this, "Trebuie o grupa sau serie", Toast.LENGTH_SHORT).show();
         } else {
             Calendar calendar = Calendar.getInstance();
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
             String day = Utils.getCurrentDay(dayOfWeek);
             SharePref.setDay(getApplicationContext(), dayOfWeek);
-            String path = AppUrlConstants.BASE_URL + "/orar/like?grupa=" + grupa + "&zi=" + day;
+            String path = AppUrlConstants.BASE_URL + "/orar/like?grupa=" + grupa + "%20" + serie + "&zi=" + day;
             ApiCalls.getInstance(getApplicationContext()).getStringRequest(path, this);
         }
     }
@@ -87,7 +96,8 @@ public class WidgetClassConfigureActivity extends Activity implements View.OnCli
     @Override
     public void onSuccessfulResponse(String response) {
         SharePref.setCurrentOrar(WidgetClassConfigureActivity.this, response);
-        SharePref.setGrupa(this, mAppWidgetText.getText().toString());
+        SharePref.setGrupa(this, mAppWidgetTextGrupa.getText().toString());
+        SharePref.setSerie(this, mAppWidgetTextSerie.getText().toString());
         Utils.setScrollPosition(getApplicationContext());
         startWidget();
     }

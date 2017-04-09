@@ -1,6 +1,8 @@
 package com.test.widget.utils;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import com.test.widget.entities.Interval;
 
@@ -80,4 +82,15 @@ public class Utils {
         }
         return result;
     }
+
+
+    public static int getColor(Context context, int id) {
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 23) {
+            return ContextCompat.getColor(context, id);
+        } else {
+            return context.getResources().getColor(id);
+        }
+    }
+
 }

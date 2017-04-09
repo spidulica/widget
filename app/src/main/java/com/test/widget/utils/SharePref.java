@@ -34,6 +34,7 @@ public class SharePref {
     }
 
     private static final String GRUPA = "grupa";
+    private static final String SERIE = "serie";
     private static final String CURRENT_DAY = "current_day";
     private static final String CURRENT_HOUR = "current_hour";
     private static final String SCROLL_POSITION = "scroll_position";
@@ -41,11 +42,19 @@ public class SharePref {
     private static final String EXTRA_APPWIDGET_ID = "extra_appwidget_id";
 
     public static String getGrupa(Context context) {
-        return getSharedPreferences(context).getString(GRUPA, null);
+        return getSharedPreferences(context).getString(GRUPA, "");
     }
 
     public static void setGrupa(Context context, String grupa) {
         getSharedPreferences(context).edit().putString(GRUPA, grupa).apply();
+    }
+
+    public static String getSerie(Context context) {
+        return getSharedPreferences(context).getString(SERIE, "");
+    }
+
+    public static void setSerie(Context context, String serie) {
+        getSharedPreferences(context).edit().putString(SERIE, serie).apply();
     }
 
     public static Integer getCurrentDay(Context context) {
