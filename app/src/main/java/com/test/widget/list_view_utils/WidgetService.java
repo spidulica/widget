@@ -1,6 +1,7 @@
 package com.test.widget.list_view_utils;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -50,12 +51,13 @@ public class WidgetService extends RemoteViewsService implements RemoteViewsServ
         remoteView.setTextViewText(R.id.profesor, listItem.getProfesor());
         remoteView.setTextViewText(R.id.materie, listItem.getMaterie());
         remoteView.setTextViewText(R.id.locatie, listItem.getLocatie());
-        remoteView.setTextViewText(R.id.interval, listItem.getOraInceput() + " - " + listItem.getOraSfarsit());
+        remoteView.setTextViewText(R.id.start, listItem.getOraInceput() );
+        remoteView.setTextViewText(R.id.end, listItem.getOraSfarsit());
 
         if (position == scrollPoss) {
-            remoteView.setInt(R.id.row_item, "setBackgroundColor", getApplicationContext().getResources().getColor(R.color.colorPrimaryDark));
+            remoteView.setInt(R.id.selected_card_line, "setBackgroundColor", ContextCompat.getColor(getApplicationContext(), R.color.blue_widget));
         } else {
-            remoteView.setInt(R.id.row_item, "setBackgroundColor", getApplicationContext().getResources().getColor(R.color.widget));
+            remoteView.setInt(R.id.selected_card_line, "setBackgroundColor", ContextCompat.getColor(getApplicationContext(), R.color.card_background));
         }
 
         return remoteView;

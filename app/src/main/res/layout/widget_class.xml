@@ -54,10 +54,14 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_below="@+id/widget_day_line"
         android:background="@android:color/transparent"
         android:overScrollMode="never"
         android:scrollbars="vertical"
+        android:divider="@color/background_widget"
+        android:dividerHeight="5.0sp"
         tools:listitem="@layout/widget_row" />
 </RelativeLayout>
